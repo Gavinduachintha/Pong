@@ -1,1 +1,1 @@
-    # pygame.draw.circle(screen,black,100,100,ball_radius)
+ball_x_position+ball_radius

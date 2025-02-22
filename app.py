@@ -2,6 +2,7 @@ import pygame
 import time
 
 pygame.init()
+pygame.display.set_caption("Pong Game")
 
 scree_width=700
 screen_height=500
@@ -35,20 +36,27 @@ while runnig:
             if event.key==pygame.K_s:
                 if(pad_x_position<400):
                     pad_x_position+=20
+                    # print(pad_x_position)
             elif event.key==pygame.K_w:
                 if(pad_x_position>0):
                     pad_x_position-=20
+                    # print(pad_x_position)
         
     ball_x_position+=ball_speed_x
     ball_y_position+=ball_speed_y
     
     if(ball_x_position<=ball_radius or ball_x_position>=scree_width-ball_radius):
         ball_speed_x=-ball_speed_x
-        
-            
+        print(ball_x_position)
     if(ball_y_position<=ball_radius or ball_y_position>=screen_height-ball_radius):
         ball_speed_y=-ball_speed_y
+        print(ball_y_position)
+        
+    if (ball_x_position-ball_radius) <= pad_width and pad_x_position < ball_y_position < pad_x_position + pad_height:
+        ball_speed_x = -ball_speed_x
+
     
+   
             
     screen.fill("black")
     pygame.draw.circle(screen,white,((ball_x_position),(ball_y_position)),ball_radius)
