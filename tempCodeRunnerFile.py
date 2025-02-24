@@ -1,1 +1,1 @@
-ball_x_position+ball_radius
+    screen.blit(text,(screen_width//2,10))
