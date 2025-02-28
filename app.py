@@ -1,8 +1,10 @@
 import pygame
 import time
 
+
 pygame.init()
 pygame.display.set_caption("Pong Game")
+
 
 screen_width=700
 screen_height=500
@@ -25,27 +27,38 @@ left_pad_y_position=0
 right_pad_x_position=screen_height//2
 right_pad_y_position=680
 
+
 left_pad_speed=0
 right_pad_speed=0
 
+
 white=(255,255,255)
 
-score = 0
+
+left_score = 0
+right_score=0
 font = pygame.font.Font(None,50)
 
-def displayScore():
-    global score
-    text=font.render(f"Score: {score}",True,(255,255,255))
-    text_rect=text.get_rect(center=(screen_width//2,20))
+
+def displayScore_left():
+    global left_score
+    text=font.render(f"Score: {left_score}",True,(255,255,255))
+    text_rect=text.get_rect(center=(screen_width//4,20))
+    screen.blit(text,text_rect)
+
+def displayScore_right():
+    global right_score
+    text=font.render(f"Score: {right_score}",True,(255,255,255))
+    text_rect=text.get_rect(center=(screen_width//4*3,20))
     screen.blit(text,text_rect)
 
     
-
 running = True
 while running:
 
     play = True
-    hit = False
+    left_pad_hit = False
+    right_pad_hit= False
 
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
@@ -96,35 +109,41 @@ while running:
     #Ball collision with the paddel
     if (ball_x_position-ball_radius) <= pad_width and left_pad_x_position < ball_y_position < left_pad_x_position + pad_height:
         ball_speed_x = -ball_speed_x
-        hit = True
+        left_pad_hit = True
 
-    if (ball_x_position-ball_radius) <= pad_width and right_pad_x_position < ball_y_position < right_pad_x_position + pad_height:
+    if (ball_x_position+ball_radius) >= screen_width-pad_width and right_pad_x_position < ball_y_position < right_pad_x_position + pad_height:
         ball_speed_x=-ball_speed_x
-        hit = True
+        right_pad_hit = True
 
     #Paddle missing and game restarting
-    if(ball_x_position-ball_radius<=0 or ball_x_position-ball_radius >=screen_width):
+    if(ball_x_position+ball_radius+5<=0 or ball_x_position-ball_radius-5 >=screen_width):
          print("Game over, restarting...")
          pygame.time.delay(1000)
          ball_x_position=screen_width//2
          ball_y_position=screen_height//2
          print("hit")
-         score =0
+         left_score =0
+         right_score=0
         
-    if(hit):
-         score+=1
+    if(left_pad_hit):
+         left_score+=1
+
+    if(right_pad_hit):
+        right_score+=1
+
 
     screen.fill("black")
     pygame.draw.circle(screen,white,((ball_x_position),(ball_y_position)),ball_radius)
     pygame.draw.rect(screen,white,((left_pad_y_position),(left_pad_x_position),pad_width,pad_height))
     pygame.draw.rect(screen,white,((right_pad_y_position),(right_pad_x_position),pad_width,pad_height))
 
-    text=font.render(f"Score: {score}",True,(255,255,255))
-    text_rect=text.get_rect(center=(screen_width//2,20))
-    screen.blit(text,text_rect)
+    text=font.render(f"Score: {left_score}",True,(255,255,255))
+    left_text_rect=text.get_rect(center=(screen_width//4,20))
+    screen.blit(text,left_text_rect)
     
 
-    displayScore()
+    displayScore_left()
+    displayScore_right()
     pygame.display.flip()
     
     clock.tick(60)
